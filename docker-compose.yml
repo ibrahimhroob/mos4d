@@ -1,0 +1,22 @@
+version: '3'
+services:
+  mos4d:
+    image: minkowski_engine
+    stdin_open: true
+    tty: true
+    command: bash -c "pip install --user jupyterlab click tqdm pytorch_lightning && tail -f /dev/null" 
+    privileged: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      - './:/mos4d'
+    working_dir: /mos4d
+    restart: "no"
+    network_mode: host
